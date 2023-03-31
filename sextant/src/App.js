@@ -1,11 +1,13 @@
 import './App.css';
+import React, { Component } from 'react';
 
 const gallery = {
   banner: {
     background: '#211C21',
     boxShadow: "0 0 10px 10px #cec7c759",
-    color: '#f4b393',
+    color: '#3F8ED8',
     width: '100%',
+    fontFamily: 'Georgia',
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -15,7 +17,7 @@ const gallery = {
     backgroundColor: "black",
     display: "flex",
     height: 100,
-    width: 400,
+    width: 800,
     boxShadow: "0px 0px 15px 10px #cec7c759",
     alignItems: "center",
     padding: 20,
@@ -41,35 +43,7 @@ const gallery = {
   },
 };
 
-const cardServices = {
-  service1: {
-    name: "Service 1",
-    desc: "Description: (placeholder)",
-    pic: "S"
-  },
-  service2: {
-    name: "Service 2",
-    desc: "Description: (placeholder)",
-    pic: "S"
-  },
-  service3: {
-    name: "Service 3",
-    desc: "Description: (placeholder)",
-    pic: "S"
-  },
-  service4: {
-    name: "Service 4",
-    desc: "Description: (placeholder)",
-    pic: "S"
-  },
-  service5: {
-    name: "Service 5",
-    desc: "Description: (placeholder)",
-    pic: "S"
-  }
-};
-
-function Banner() {
+function Banner () {
   return (
     <div style={gallery.banner}>
       <h1>
@@ -79,11 +53,36 @@ function Banner() {
   );
 }
 
+class IPaddress extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+          url: props.url,
+          ipAddress: null
+      };
+  }
+
+  componentDidMount() {
+      fetch(this.state.url)
+          .then(response => response.json())
+          .then(data => this.setState({ ipAddress: data.ip }));
+  }
+
+  render() {
+      return (
+          <div>
+              {this.state.ipAddress}
+          </div>
+      );
+  }
+}
+
+
 function Exhibit() {
   return (
     <div>
       <br></br>
-      <header style={{textAlign: "center", fontWeight: "bold"}}><u>Functions:</u></header>
+      <header style={{textAlign: "center", fontWeight: "bold"}}><u>Tools:</u></header>
       <br></br>
       <Card 
         theme={gallery} 
@@ -121,13 +120,43 @@ function Card({ theme, service}) {
   );
 }
 
-function App() {
-  return (
-    <div className="App-header">
-      <Banner />
-      <Exhibit />
-    </div>
-  );
+const cardServices = {
+  service1: {
+    name: "Public IPv4 Address",
+    desc: <IPaddress url='https://api.ipify.org?format=json' />,
+    pic: "1",
+  },
+  service2: {
+    name: "Public IPv6 Address",
+    desc: <IPaddress url='https://api64.ipify.org/?format=json' />,
+    pic: "2"
+  },
+  service3: {
+    name: "Service 3",
+    desc: "Description: (placeholder)",
+    pic: "3"
+  },
+  service4: {
+    name: "Service 4",
+    desc: "Description: (placeholder)",
+    pic: "4"
+  },
+  service5: {
+    name: "Service 5",
+    desc: "Description: (placeholder)",
+    pic: "5"
+  }
+};
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App-header">
+        <Banner />
+        <Exhibit />
+      </div>
+    );
+  }
 }
 
 export default App;
