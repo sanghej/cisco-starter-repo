@@ -1,5 +1,8 @@
 import './App.css';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 import React, { Component } from 'react';
+
+const client = new W3CWebSocket('ws://localhost:55455');
 
 const gallery = {
   banner: {
@@ -70,13 +73,37 @@ class IPaddress extends Component {
 
   render() {
       return (
-          <div>
+          <>
               {this.state.ipAddress}
-          </div>
+          </>
       );
   }
 }
 
+class Pylon extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+          latency: null
+      };
+  }
+
+  componentDidMount() {
+      client.onmessage = (message) => {
+          this.setState({
+              latency: new Date().getTime() - message.data
+          })
+      };
+  }
+
+  render() {
+      return (
+          <>
+              {this.state.latency}
+          </>
+      );
+  }
+}
 
 function Exhibit() {
   return (
@@ -132,13 +159,13 @@ const cardServices = {
     pic: "2"
   },
   service3: {
-    name: "Service 3",
-    desc: "Description: (placeholder)",
+    name: "Pylon Packet Latency",
+    desc: <Pylon />,
     pic: "3"
   },
   service4: {
-    name: "Service 4",
-    desc: "Description: (placeholder)",
+    name: "(Space for additional tool)",
+    desc: "(Add more as necessary)",
     pic: "4"
   },
   service5: {
